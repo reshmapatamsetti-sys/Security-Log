@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 style="margin-bottom: 20px;">System Configuration & Settings</h2>
+
+<div class="panel" style="max-width: 600px;">
+    <h3>Operational Parameters</h3>
+    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Manage SIEM detection thresholds and database states.</p>
+    
+    <div class="form-group">
+        <label>Brute-Force Failure Threshold</label>
+        <input type="text" class="form-control" value="5 attempts" disabled>
+    </div>
+    <div class="form-group">
+        <label>Detection Time Window</label>
+        <input type="text" class="form-control" value="5 minutes" disabled>
+    </div>
+    <div class="form-group">
+        <label>Database Path</label>
+        <input type="text" class="form-control" value="database/securelog.db" disabled>
+    </div>
+</div>
+{% endblock %}

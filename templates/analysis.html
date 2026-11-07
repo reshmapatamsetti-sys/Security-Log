@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 style="margin-bottom: 20px;">IP Activity & Risk Analysis</h2>
+
+<div class="panel">
+    <h3>Network Origin Intelligence</h3>
+    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px;">Aggregated statistics and heuristic risk scoring per source IP address.</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Source IP</th>
+                <th>Total Events</th>
+                <th>Failed Logins</th>
+                <th>Distinct Usernames</th>
+                <th>Risk Classification</th>
+                <th>Last Seen</th>
+            </tr>
+        </thead>
+        <tbody id="ip-analysis-body">
+            <tr><td colspan="6" style="text-align: center; color: var(--text-muted);">Analyzing IP telemetry...</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="{{ url_for('static', filename='js/analysis.js') }}"></script>
+{% endblock %}

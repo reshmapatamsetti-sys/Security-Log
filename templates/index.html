@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+    <h2>Security Operations Center Dashboard</h2>
+    <button onclick="runDetections()" class="btn btn-primary"><i class="fa-solid fa-bolt"></i> Run Detection Engine</button>
+</div>
+
+<!-- Statistics Cards -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <span class="stat-title">Total Events</span>
+        <span id="stat-total" class="stat-value">-</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-title">Successful Logins</span>
+        <span id="stat-success" class="stat-value" style="color: var(--accent-green);">-</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-title">Failed Logins</span>
+        <span id="stat-failed" class="stat-value" style="color: var(--sev-high);">-</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-title">Active Alerts</span>
+        <span id="stat-alerts" class="stat-value" style="color: var(--sev-critical);">-</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-title">Unique IPs</span>
+        <span id="stat-ips" class="stat-value" style="color: var(--accent-cyan);">-</span>
+    </div>
+</div>
+
+<!-- Dashboard Panel -->
+<div class="panel">
+    <div class="panel-header">
+        <h3>Recent Security Telemetry</h3>
+        <a href="{{ url_for('logs.logs_view') }}" style="color: var(--accent-cyan); text-decoration: none; font-size: 0.9rem;">View All Logs →</a>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Source IP</th>
+                <th>Username</th>
+                <th>Event Type</th>
+                <th>Severity</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody id="recent-logs-table">
+            <tr><td colspan="6" style="text-align: center; color: var(--text-muted);">Loading telemetry data...</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+async function loadDashboardStats() {
+    try {
+        const res = await fetch('/api/dashboard/stats');
+        const data = await res.json();
+        document.getElementById('stat-total').innerText = data.total_events;
+        document.getElementById('stat-success').innerText = data.successful_logins;
+        document.getElementById('stat-failed').innerText = data.failed_logins;
+        document.getElementById('stat-alerts').innerText = data.active_alerts;
+        document.getElementById('stat-ips').innerText = data.unique_ips;
+    } catch (e) {
+        console.error("Failed to load stats", e);
+    }
+}
+
+async function loadRecentLogs() {
+    try {
+        const res = await fetch('/api/logs?per_page=5');
+        const data = await res.json();
+        const tbody = document.getElementById('recent-logs-table');
+        tbody.innerHTML = '';
+        
+        if (data.logs.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No logs recorded.</td></tr>';
+            return;
+        }
+
+        data.logs.forEach(log => {
+            const badgeClass = `badge badge-${log.severity.toLowerCase()}`;
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${log.timestamp}</td>
+                <td><code>${log.source_ip}</code></td>
+                <td>${log.username}</td>
+                <td>${log.event_type}</td>
+                <td><span class="${badgeClass}">${log.severity}</span></td>
+                <td>${log.description}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    } catch (e) {
+        console.error("Failed to load recent logs", e);
+    }
+}
+
+async function runDetections() {
+    try {
+        const res = await fetch('/api/detections/run', { method: 'POST' });
+        const data = await res.json();
+        alert(data.message);
+        loadDashboardStats();
+    } catch (e) {
+        alert("Error running detection engine.");
+    }
+}
+
+loadDashboardStats();
+loadRecentLogs();
+</script>
+{% endblock %}

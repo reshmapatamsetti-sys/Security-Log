@@ -1,0 +1,9 @@
+instance/
+*.pyc
+__pycache__/
+database/securelog.db
+.venv/
+env/
+venv/
+logs/*.log
+.DS_Store

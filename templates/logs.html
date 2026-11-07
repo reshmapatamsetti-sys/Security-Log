@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h2>Security Log Management</h2>
+    <div style="display: flex; gap: 10px;">
+        <input type="file" id="csv-file-input" accept=".csv" style="display: none;" onchange="uploadCSV(this)">
+        <button onclick="document.getElementById('csv-file-input').click()" class="btn btn-primary"><i class="fa-solid fa-file-arrow-up"></i> Import CSV</button>
+        <button onclick="clearLogs()" class="btn" style="background-color: rgba(239, 68, 68, 0.2); color: var(--sev-critical); border: 1px solid var(--sev-critical);">
+        <i class="fa-solid fa-trash"></i> Clear Logs</button>
+    </div>
+</div>
+
+<!-- Filters & Search Bar -->
+<div class="panel" style="padding: 15px; margin-bottom: 20px; display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
+    <div style="flex: 1; min-width: 200px;">
+        <input type="text" id="search-input" class="form-control" placeholder="Search username, IP, description..." oninput="debounceSearch()">
+    </div>
+    <div>
+        <select id="filter-type" class="form-control" onchange="loadLogs(1)">
+            <option value="All">All Event Types</option>
+            <option value="Successful Login">Successful Login</option>
+            <option value="Failed Login">Failed Login</option>
+            <option value="Logout">Logout</option>
+            <option value="Password Change">Password Change</option>
+            <option value="Account Lockout">Account Lockout</option>
+            <option value="Suspicious Activity">Suspicious Activity</option>
+            <option value="Unauthorized Access Attempt (simulated)">Unauthorized Access</option>
+            <option value="System Activity">System Activity</option>
+        </select>
+    </div>
+    <div>
+        <select id="filter-severity" class="form-control" onchange="loadLogs(1)">
+            <option value="All">All Severities</option>
+            <option value="Critical">Critical</option>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+            <option value="Informational">Informational</option>
+        </select>
+    </div>
+</div>
+
+<!-- Logs Table -->
+<div class="panel">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Timestamp</th>
+                <th>Source IP</th>
+                <th>Username</th>
+                <th>Event Type</th>
+                <th>Severity</th>
+                <th>Description</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="logs-table-body">
+            <tr><td colspan="8" style="text-align: center; color: var(--text-muted);">Loading security logs...</td></tr>
+        </tbody>
+    </table>
+    <!-- Pagination -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; font-size: 0.9rem;">
+        <span id="pagination-info" style="color: var(--text-muted);">Showing page 1 of 1</span>
+        <div style="display: flex; gap: 10px;">
+            <button id="prev-btn" class="btn" style="background-color: var(--bg-card); color: var(--text-main);" onclick="changePage(-1)">Previous</button>
+            <button id="next-btn" class="btn" style="background-color: var(--bg-card); color: var(--text-main);" onclick="changePage(1)">Next</button>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/logs.js') }}"></script>
+{% endblock %}

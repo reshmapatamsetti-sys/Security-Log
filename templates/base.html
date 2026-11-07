@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title | default('SecureLog SOC') }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    {% if session.get('user_id') %}
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div>
+            <div class="sidebar-brand">
+                <i class="fa-solid fa-shield-halved"></i> SecureLog
+            </div>
+            <ul class="sidebar-menu">
+                <li class="{{ 'active' if request.endpoint == 'dashboard.dashboard_view' }}"><a href="{{ url_for('dashboard.dashboard_view') }}"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
+                <li class="{{ 'active' if request.endpoint == 'logs.logs_view' }}"><a href="{{ url_for('logs.logs_view') }}"><i class="fa-solid fa-list-shield"></i> Security Logs</a></li>
+                <li class="{{ 'active' if request.endpoint == 'alerts.alerts_view' }}"><a href="{{ url_for('alerts.alerts_view') }}"><i class="fa-solid fa-triangle-exclamation"></i> Alerts</a></li>
+                <li class="{{ 'active' if request.endpoint == 'analysis.analysis_view' }}"><a href="{{ url_for('analysis.analysis_view') }}"><i class="fa-solid fa-network-wired"></i> IP Analysis</a></li>
+                <li><a href="{{ url_for('auth.logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+            </ul>
+        </div>
+        <div style="padding: 20px; font-size: 0.8rem; color: var(--text-muted);">
+            User: <strong>{{ session.get('username') }}</strong>
+        </div>
+    </aside>
+    {% endif %}
+
+    <!-- Main Container -->
+    <div class="main-container">
+        {% if session.get('user_id') %}
+        <nav class="top-navbar">
+            <div style="font-size: 1.1rem; font-weight: 600;">Security Operations Center Telemetry</div>
+            <div id="current-time" style="color: var(--text-muted); font-size: 0.9rem;"></div>
+        </nav>
+        {% endif %}
+
+        <div class="content-body">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert-flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <script>
+        // Update top navbar live clock
+        function updateClock() {
+            const el = document.getElementById('current-time');
+            if (el) {
+                el.innerText = new Date().toUTCString();
+            }
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>
