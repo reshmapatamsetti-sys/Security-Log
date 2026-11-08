@@ -1,22 +1,22 @@
-# SecureLog: Intelligent Security Log Monitoring and Threat Detection System
+SecureLog: Intelligent Security Log Monitoring and Threat Detection System
 
 SecureLog is a SIEM-inspired (Security Information and Event Monitoring) cybersecurity application designed to collect, process, analyze, and visualize security telemetry. Built with Python, Flask, and SQLite, it features automated brute-force detection, IP risk analysis, alert lifecycle management, and a responsive Security Operations Center (SOC) dashboard.
 
----
 
-## 1. Project Introduction & Problem Statement
+
+1. Project Introduction & Problem Statement
 Modern digital infrastructure generates millions of log events daily. Security teams struggle to manually sift through disparate logs to spot sophisticated threats such as brute-force attacks, credential stuffing, and unauthorized access attempts. 
 
 SecureLog solves this by centralizing security log collection, applying rule-based anomaly detection in real time, and presenting actionable security intelligence through a professional SOC dashboard.
 
-## 2. Project Objectives
+2. Project Objectives
 - Provide a centralized platform for security event ingestion and monitoring.
 - Automate the detection of repeated failed authentication attempts and brute-force attacks using configurable sliding time windows.
 - Track network origin intelligence and classify IP risk levels.
 - Manage security alerts through an incident lifecycle (*Open*, *Acknowledged*, *Resolved*).
 - Demonstrate clean, modular, and maintainable software engineering principles suitable for technical interviews.
 
-## 3. Key Features
+3. Key Features
 - **User Authentication Portal:** Secure registration and login portal where authentication attempts (successful and failed) are recorded into security logs.
 - **Security Log Management:** Paginated, searchable, and filterable log table with CSV import validation.
 - **Automated Threat Detection Engine:** Scans logs for configurable thresholds (e.g., 5 failed logins within 5 minutes) and prevents duplicate active alerts.
@@ -24,19 +24,19 @@ SecureLog solves this by centralizing security log collection, applying rule-bas
 - **Interactive SOC Dashboard:** Real-time statistics cards and live telemetry feeds.
 - **Automated Testing:** Comprehensive `pytest` suite covering database initialization, log management, and detection rules.
 
-## 4. Technology Stack
+4. Technology Stack
 - **Backend:** Python 3, Flask, Flask Blueprints, Werkzeug (Password Hashing)
 - **Database:** SQLite, Python `sqlite3` (with parameterized queries)
 - **Frontend:** HTML5, CSS3, JavaScript (Fetch API)
 - **Testing:** Pytest
 - **Environment:** Visual Studio Code, Git, Python Virtual Environment (`venv`)
 
-## 5. System Architecture & Folder Structure
+5. System Architecture & Folder Structure
 SecureLog follows a modular MVC-inspired architecture:
 ```text
 SecureLog/
 │
-├── app.py                      # Flask application factory and entry point
+├── app.py                      # Flask application factory and entry po
 ├── config.py                   # Application configuration settings
 ├── requirements.txt            # Python dependencies
 ├── README.md                   # Project documentation
